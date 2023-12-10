@@ -37,28 +37,6 @@ ChocolateContract is a Solidity smart contract that facilitates the purchase and
 - **Usage**:
   - Only the contract owner can call this function. They can consume chocolates from their stock, limited to one unit per call.
 
-## Example Usage
-
-### Buying Chocolates
-
-```javascript
-// JavaScript example using web3.js
-const contractInstance = new web3.eth.Contract(contractAbi, contractAddress);
-
-// Purchase 5 chocolates
-contractInstance.methods.purchaseChocolate(5).send({ from: userAddress, value: 5 });
-```
-
-### Consuming Chocolates
-
-```javascript
-// JavaScript example using web3.js
-const contractInstance = new web3.eth.Contract(contractAbi, contractAddress);
-
-// Consume 1 chocolate (as the owner)
-contractInstance.methods.consumeChocolate(1).send({ from: ownerAddress });
-```
-
 ## Notes
 
 - Ensure proper handling of Ether sent with function calls to prevent loss of funds.

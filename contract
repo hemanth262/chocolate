@@ -1,0 +1,45 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+contract ChocolateContract {
+    address public owner;
+    mapping(address => uint256) public chocolateStock;
+
+    event ChocolatePurchased(address indexed buyer, uint256 quantity);
+    event ChocolateConsumed(address indexed consumer, uint256 quantity);
+
+    modifier onlyOwner() {
+        require(msg.sender == owner, "Only the owner can call this function");
+        _;
+    }
+
+    modifier sufficientStock(uint256 quantity) {
+        require(chocolateStock[msg.sender] >= quantity, "Insufficient stock");
+        _;
+    }
+
+    constructor() {
+        owner = msg.sender;
+    }
+
+    function purchaseChocolate(uint256 sum) external payable {
+        assert(sum > 0);
+
+        uint256 cost = sum * 1; 
+        chocolateStock[msg.sender] += sum;
+        if (msg.value > cost) {
+            payable(msg.sender).transfer(msg.value - cost);
+        }
+
+        emit ChocolatePurchased(msg.sender, sum);
+    }
+
+    function consumeChocolate(uint256 quantity) external onlyOwner sufficientStock(quantity) {
+        chocolateStock[msg.sender] -= quantity;
+        if (quantity > 1) {
+            revert("Cannot consume more than 1 units at once");
+        }
+
+        emit ChocolateConsumed(msg.sender, quantity);
+    }
+}
